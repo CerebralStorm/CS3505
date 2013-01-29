@@ -7,10 +7,21 @@
  */
 
 #include <string>
-#include "warehouse.h"
 
 namespace inventory
 {
+  class warehouse
+  {
+  public:
+    warehouse(std::string name);
+
+    // public methods
+    std::string get_name();
+
+  private:
+    std::string name;     
+  };
+
   /*******************************************************
    * warehouse member function definitions
    ***************************************************** */
@@ -18,22 +29,12 @@ namespace inventory
   /** Constructor:  Creates a warehouse whose
     *   name is passed in as an argument.
     */
-  warehouse::warehouse(std::string name)
+  warehouse::warehouse(std::string n)
   {
-    this->name = name;  // This warehouse points to no other warehouse.
+    this->name = n;
   }
 
-  
-  /** Destructor:  release any memory allocated
-    *   for this object.
-    */
-  warehouse::~warehouse()
-  {
-
-  }
-
-   // returns the string of the huge_number's value
-  std::string warehhouse::name()
+  std::string warehouse::get_name()
   {
     return this->name;
   }
