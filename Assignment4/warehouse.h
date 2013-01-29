@@ -13,21 +13,16 @@
 
 namespace inventory
 {
-  /* warehouse class for holding elements. */
   class warehouse
   {
   public:
-    warehouse(std::string name); //  constructor with parameter
-    warehouse(const warehouse& w); // copy constructor
-
-    // leaving the comment below to help me understand friend classes
-    //friend class utah_set;  // This allows functions in utah_set to access
+    warehouse(std::string name);
 
     // public methods
-    std::string name();
+    std::string get_name();
 
   private:
-		std::string name;	    
+    std::string name;     
   };
 }
 

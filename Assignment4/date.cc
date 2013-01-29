@@ -7,25 +7,10 @@
  */
 
 #include <string>
+#include "date.h"
 
 namespace inventory
 {
-  class date
-  {
-  public:
-    date(int month, int day, int year); //  constructor with parameter
-
-    // public methods
-    int get_month();
-    int get_day();
-    int get_year();
-
-  private:
-    int month;
-    int day;
-    int year;     
-  };
-
   date::date(int m, int d, int y)
   {
     this->month = m;
