@@ -18,7 +18,7 @@
 
 namespace inventory
 {
-    void parser_helper::handle_food_item(std::string line)
+    food_item parser_helper::handle_food_item(std::string line)
     {
         std::string word;
         std::stringstream reader(line);
@@ -48,15 +48,10 @@ namespace inventory
         }
         
         //create the object to return
-        //food_item item;
-        
-        std::cout << "FoodItem" << std::endl;
-        std::cout << upc << std::endl;
-        std::cout << shelf_life << std::endl;
-        std::cout << name << "\n\n";
+        return food_item(atoi(upc.c_str()), atoi(shelf_life.c_str()), name);
     }
     
-    void parser_helper::handle_warehouse(std::string line)
+    warehouse parser_helper::handle_warehouse(std::string line)
     {
         std::string word;
         std::stringstream reader(line);
@@ -73,11 +68,7 @@ namespace inventory
         }
         
         //create the object to return
-        //warehouse item;
-        
-        std::cout << "Warehouse" << std::endl;
-        std::cout << name << "\n\n";
-        reader.clear();
+        return warehouse(name);
     }
 
     void parser_helper::handle_date(std::string line)
@@ -96,14 +87,14 @@ namespace inventory
             }
         }
         
-        //create the object to return
-        //date item;
-        
         std::cout << "Date" << std::endl;
         std::cout << date << "\n\n";
+        
+        //create the object to return
+        //return date item(date);
     }
     
-    void parser_helper::handle_request(std::string line)
+    request parser_helper::handle_request(std::string line)
     {
         std::string word;
         std::stringstream reader(line);
@@ -126,15 +117,10 @@ namespace inventory
         }
         
         //create the object to return
-        //request item;
-        
-        std::cout << "Request" << std::endl;
-        std::cout << upc << std::endl;
-        std::cout << quantity << std::endl;
-        std::cout << warehouse << "\n\n";
+        return request(atoi(upc.c_str()), atoi(quantity.c_str()), warehouse);
     }
     
-    void parser_helper::handle_receive(std::string line)
+    receive parser_helper::handle_receive(std::string line)
     {
         std::string word;
         std::stringstream reader(line);
@@ -157,12 +143,7 @@ namespace inventory
         }
         
         //create the object to return
-        //receive item;
-        
-        std::cout << "Request" << std::endl;
-        std::cout << upc << std::endl;
-        std::cout << quantity << std::endl;
-        std::cout << warehouse << "\n\n";
+        return receive(atoi(upc.c_str()), atoi(quantity.c_str()), warehouse);
     }
 
 }

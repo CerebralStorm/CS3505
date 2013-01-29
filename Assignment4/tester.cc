@@ -31,12 +31,20 @@ int main(int argc, char* argv[])
         if(command == "FoodItem")
         {
             string ln = line;
-            inventory::parser_helper::handle_food_item(ln);
+            inventory::food_item item = inventory::parser_helper::handle_food_item(ln);
+            
+            cout << "FoodItem" << endl;
+            cout << item.get_upc() << endl;
+            cout << item.get_shelf_life() << endl;
+            cout << item.get_name() << "\n\n";
         }
         else if(command == "Warehouse")
         {
             string ln = line;
-            inventory::parser_helper::handle_warehouse(ln);
+            inventory::warehouse item = inventory::parser_helper::handle_warehouse(ln);
+            
+            cout << "Warehouse" << endl;
+            cout << item.get_name() << "\n\n";
         }
         else if(command == "Start")
         {
@@ -46,12 +54,22 @@ int main(int argc, char* argv[])
         else if(command == "Receive:")
         {
             string ln = line;
-            inventory::parser_helper::handle_receive(ln);
+            inventory::receive item = inventory::parser_helper::handle_receive(ln);
+            
+            cout << "Receive" << endl;
+            cout << item.get_upc() << endl;
+            cout << item.get_quantity() << endl;
+            cout << item.get_warehouse() << "\n\n";
         }
         else if(command == "Request:")
         {
             string ln = line;
-            inventory::parser_helper::handle_request(ln);
+            inventory::request item = inventory::parser_helper::handle_request(ln);
+            
+            cout << "Request" << endl;
+            cout << item.get_upc() << endl;
+            cout << item.get_quantity() << endl;
+            cout << item.get_warehouse() << "\n\n";
         }
         else if(command == "Next")
         {
