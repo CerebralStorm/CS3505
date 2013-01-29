@@ -1,38 +1,62 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <stdio.h>
 #include "warehouse.h"
 #include "food_item.h"
 #include "date.h"
 
 using namespace std;
 
+string first_word(const string& line);
+
 int main(int argc, char* argv[])
 {
     string file_name = argv[1];
-    ifstream in("data1.txt");
+    ifstream inv_file("data1.txt");
+    string line;
+    string command;
 
-    // Loop for reading the file.  Note that it is controlled
-    //   from within the loop (see the 'break').
-    
-    while (true)
+    if (inv_file.is_open())
     {
-      // Read a word (don't worry about punctuation)
-      
-      string word;
-      in >> word;
+      while ( inv_file.good() )
+      {
+        getline (inv_file,line);
+        command = first_word(line);
 
-      // If the read failed, we're probably at end of file
-      //   (or else the disk went bad).  Exit the loop.
-      
-      if (in.fail())
-        break;
+        if(command == "FoodItem")
+        {
+          cout << "Recognized FoodItem" << endl;
+        }
+        else if(command == "Warehouse")
+        {
+          cout << "Recognized Warehouse" << endl;
+        }
+        else if(command == "Start")
+        {
+          cout << "Recognized Start Date" << endl;
+        }
+        else if(command == "Receive:")
+        {
+          cout << "Recognized Receive" << endl;
+        }
+        else if(command == "Request:")
+        {
+          cout << "Recognized Request" << endl;
+        }
+        else if(command == "Next")
+        {
+          cout << "Recognized Next Day" << endl;
+        }
 
-      cout << word << endl;
+        cout << command << endl;
+      }
+      inv_file.close();
     }
-
-    // Close the file.
-
-    in.close();
   return 0;
+}
+
+string first_word(const string& line)
+{
+    return line.substr(0, line.find(' '));
 }
