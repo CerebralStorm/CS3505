@@ -5,34 +5,34 @@
 #include "food_item.h"
 #include "date.h"
 
-using namespace inventory;
+using namespace std;
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
-    // string file_name = argv[0];
-    // ifstream in(file_name);
+    string file_name = argv[1];
+    ifstream in("data1.txt");
 
-    // // Loop for reading the file.  Note that it is controlled
-    // //   from within the loop (see the 'break').
+    // Loop for reading the file.  Note that it is controlled
+    //   from within the loop (see the 'break').
     
-    // while (true)
-    // {
-    //   // Read a word (don't worry about punctuation)
+    while (true)
+    {
+      // Read a word (don't worry about punctuation)
       
-    //   string word;
-    //   in >> word;
+      string word;
+      in >> word;
 
-    //   // If the read failed, we're probably at end of file
-    //   //   (or else the disk went bad).  Exit the loop.
+      // If the read failed, we're probably at end of file
+      //   (or else the disk went bad).  Exit the loop.
       
-    //   if (in.fail())
-    //     break;
+      if (in.fail())
+        break;
 
-    //   cout << word << endl;
-    // }
+      cout << word << endl;
+    }
 
-    // // Close the file.
+    // Close the file.
 
-    // in.close();
+    in.close();
   return 0;
 }
