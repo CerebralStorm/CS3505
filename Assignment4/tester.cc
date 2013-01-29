@@ -26,30 +26,32 @@ int main(int argc, char* argv[])
 
         if(command == "FoodItem")
         {
-          cout << "Recognized FoodItem" << endl;
+          string upc = line.substr(21, 10);
+          string shelf_life = line.substr(45, 1);
+          cout << upc << endl;
+          cout << shelf_life << endl;
         }
         else if(command == "Warehouse")
         {
-          cout << "Recognized Warehouse" << endl;
+          //cout << "Recognized Warehouse" << endl;
         }
         else if(command == "Start")
         {
-          cout << "Recognized Start Date" << endl;
+          //cout << "Recognized Start Date" << endl;
         }
         else if(command == "Receive:")
         {
-          cout << "Recognized Receive" << endl;
+          //cout << "Recognized Receive" << endl;
         }
         else if(command == "Request:")
         {
-          cout << "Recognized Request" << endl;
+          //cout << "Recognized Request" << endl;
         }
         else if(command == "Next")
         {
-          cout << "Recognized Next Day" << endl;
+          //cout << "Recognized Next Day" << endl;
         }
 
-        cout << command << endl;
       }
       inv_file.close();
     }
