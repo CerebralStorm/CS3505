@@ -10,6 +10,11 @@
 #include <sstream>
 #include <iostream>
 #include <string>
+#include "food_item.h"
+#include "warehouse.h"
+#include "date.h"
+#include "request.h"
+#include "receive.h"
 
 namespace inventory
 {
@@ -41,6 +46,10 @@ namespace inventory
                 }
             }
         }
+        
+        //create the object to return
+        //food_item item;
+        
         std::cout << "FoodItem" << std::endl;
         std::cout << upc << std::endl;
         std::cout << shelf_life << std::endl;
@@ -62,6 +71,10 @@ namespace inventory
                 name = word;
             }
         }
+        
+        //create the object to return
+        //warehouse item;
+        
         std::cout << "Warehouse" << std::endl;
         std::cout << name << "\n\n";
         reader.clear();
@@ -82,6 +95,10 @@ namespace inventory
                 date = word;
             }
         }
+        
+        //create the object to return
+        //date item;
+        
         std::cout << "Date" << std::endl;
         std::cout << date << "\n\n";
     }
@@ -107,6 +124,10 @@ namespace inventory
                 warehouse = word;
             }
         }
+        
+        //create the object to return
+        //request item;
+        
         std::cout << "Request" << std::endl;
         std::cout << upc << std::endl;
         std::cout << quantity << std::endl;
@@ -134,6 +155,10 @@ namespace inventory
                 warehouse = word;
             }
         }
+        
+        //create the object to return
+        //receive item;
+        
         std::cout << "Request" << std::endl;
         std::cout << upc << std::endl;
         std::cout << quantity << std::endl;
