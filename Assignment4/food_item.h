@@ -16,15 +16,15 @@ namespace inventory
   class food_item
   {
   public:
-    food_item(int upc, int shelf_life, std::string name); 
+      food_item(std::string upc, int shelf_life, std::string name);
 
     // public methods
-    int get_upc();
+    std::string get_upc();
     int get_shelf_life();
     std::string get_name();
 
   private:
-    int upc;
+    std::string upc;
     int shelf_life;
     std::string name;     
   };

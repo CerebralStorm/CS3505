@@ -16,13 +16,13 @@ namespace inventory
     class receive
     {
     public:
-        receive(int upc, int quantity, std::string warehouse);
-        int get_upc();
+        receive(std::string upc, int quantity, std::string warehouse);
+        std::string get_upc();
         int get_quantity();
         std::string get_warehouse();
         
     private:
-        int upc;
+        std::string upc;
         int quantity;
         std::string warehouse;
     };

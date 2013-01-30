@@ -48,7 +48,7 @@ namespace inventory
         }
         
         //create the object to return
-        return food_item(atoi(upc.c_str()), atoi(shelf_life.c_str()), name);
+        return food_item(upc, atoi(shelf_life.c_str()), name);
     }
     
     warehouse parser_helper::handle_warehouse(std::string line)
@@ -117,7 +117,7 @@ namespace inventory
         }
         
         //create the object to return
-        return request(atoi(upc.c_str()), atoi(quantity.c_str()), warehouse);
+        return request(upc, atoi(quantity.c_str()), warehouse);
     }
     
     receive parser_helper::handle_receive(std::string line)
@@ -143,7 +143,7 @@ namespace inventory
         }
         
         //create the object to return
-        return receive(atoi(upc.c_str()), atoi(quantity.c_str()), warehouse);
+        return receive(upc, atoi(quantity.c_str()), warehouse);
     }
 
 }

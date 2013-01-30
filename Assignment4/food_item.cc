@@ -11,14 +11,14 @@
 
 namespace inventory
 {
-  food_item::food_item(int u, int s, std::string n)
+    food_item::food_item(std::string u, int s, std::string n)
   {
     this->upc = u;
     this->shelf_life = s;
     this->name = n;
   }
 
-  int food_item::get_upc()
+  std::string food_item::get_upc()
   {
     return this->upc;
   }

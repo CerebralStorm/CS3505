@@ -11,14 +11,14 @@
 
 namespace inventory
 {
-    receive::receive(int upc, int quantity, std::string warehouse)
+    receive::receive(std::string upc, int quantity, std::string warehouse)
     {
         this->upc = upc;
         this->quantity = quantity;
         this->warehouse = warehouse;
     }
     
-    int receive::get_upc()
+    std::string receive::get_upc()
     {
         return upc;
     }

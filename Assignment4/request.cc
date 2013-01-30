@@ -11,14 +11,14 @@
 
 namespace inventory
 {
-    request::request (int upc, int quantity, std::string warehouse)
+    request::request (std::string upc, int quantity, std::string warehouse)
     {
         this->upc = upc;
         this->quantity = quantity;
         this->warehouse = warehouse;
     }
     
-    int request::get_upc()
+    std::string request::get_upc()
     {
         return this->upc;
     }

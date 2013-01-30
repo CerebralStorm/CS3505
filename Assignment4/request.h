@@ -16,12 +16,12 @@ namespace inventory
     class request
     {
     public:
-        request(int upc, int quantity, std::string warehouse);
-        int get_upc();
+        request(std::string upc, int quantity, std::string warehouse);
+        std::string get_upc();
         int get_quantity();
         std::string get_warehouse();
     private:
-        int upc;
+        std::string upc;
         int quantity;
         std::string warehouse;
     };
