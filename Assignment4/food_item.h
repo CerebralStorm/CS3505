@@ -9,14 +9,14 @@
 #ifndef FOOD_ITEM_H
 #define FOOD_ITEM_H
 
-#include<string>
+#include <string>
 
 namespace inventory
 {
   class food_item
   {
   public:
-      food_item(std::string upc, int shelf_life, std::string name);
+    food_item(std::string upc, int shelf_life, std::string name);
 
     // public methods
     std::string get_upc();

@@ -6,8 +6,6 @@
 #include "food_item.h"
 #include "date.h"
 #include "parser_helper.h"
-#include "receive.h"
-#include "request.h"
 
 using namespace std;
 
@@ -54,22 +52,14 @@ int main(int argc, char* argv[])
         else if(command == "Receive:")
         {
             string ln = line;
-            inventory::receive item = inventory::parser_helper::handle_receive(ln);
             
             cout << "Receive" << endl;
-            cout << item.get_upc() << endl;
-            cout << item.get_quantity() << endl;
-            cout << item.get_warehouse() << "\n\n";
         }
         else if(command == "Request:")
         {
             string ln = line;
-            inventory::request item = inventory::parser_helper::handle_request(ln);
             
             cout << "Request" << endl;
-            cout << item.get_upc() << endl;
-            cout << item.get_quantity() << endl;
-            cout << item.get_warehouse() << "\n\n";
         }
         else if(command == "Next")
         {

@@ -10,11 +10,10 @@
 #include <sstream>
 #include <iostream>
 #include <string>
+#include <cstdlib>
 #include "food_item.h"
 #include "warehouse.h"
 #include "date.h"
-#include "request.h"
-#include "receive.h"
 
 namespace inventory
 {
@@ -115,9 +114,6 @@ namespace inventory
                 warehouse = word;
             }
         }
-        
-        //create the object to return
-        return request(upc, atoi(quantity.c_str()), warehouse);
     }
     
     receive parser_helper::handle_receive(std::string line)
@@ -141,9 +137,6 @@ namespace inventory
                 warehouse = word;
             }
         }
-        
-        //create the object to return
-        return receive(upc, atoi(quantity.c_str()), warehouse);
     }
 
 }

@@ -9,7 +9,10 @@
 #ifndef WAREHOUSE_H
 #define WAREHOUSE_H
 
-#include<string>
+#include <string>
+#include <map>
+#include <vector> 
+#include "food_item.h"
 
 namespace inventory
 {
@@ -20,9 +23,11 @@ namespace inventory
 
     // public methods
     std::string get_name();
+    std::map <std::string, std::vector <food_item> > CCTagMap;
+    //std::map<std::string, food_item::food_item> inv;
 
   private:
-    std::string name;     
+    std::string name;        
   };
 }
 
