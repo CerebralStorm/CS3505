@@ -7,17 +7,27 @@
  */
 
 #include <string>
+#include <map>
+#include <vector>
 #include "warehouse.h"
+#include "food_item.h"
 
 namespace inventory
 {
   warehouse::warehouse(std::string n)
   {
     this->name = n;
+    std::vector<food_item> *v = new std::vector<food_item>();
+    this->inv = *v;
   }
 
   std::string warehouse::get_name()
   {
     return this->name;
+  }
+
+  std::vector<food_item> warehouse::get_inv()
+  {
+    return this->inv;
   }
 }

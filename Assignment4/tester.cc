@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 #include <stdio.h>
+#include <map>
 #include "warehouse.h"
 #include "food_item.h"
 #include "date.h"
@@ -17,6 +18,8 @@ int main(int argc, char* argv[])
     ifstream inv_file("data1.txt");
     string line;
     string command;
+    map<string, inventory::food_item> food;
+    map<string, inventory::warehouse> warehouse;
     
     if (inv_file.is_open())
     {
@@ -29,20 +32,14 @@ int main(int argc, char* argv[])
         if(command == "FoodItem")
         {
             string ln = line;
-            inventory::food_item item = inventory::parser_helper::handle_food_item(ln);
-            
-            cout << "FoodItem" << endl;
-            cout << item.get_upc() << endl;
-            cout << item.get_shelf_life() << endl;
-            cout << item.get_name() << "\n\n";
+            inventory::food_item item = inventory::parser_helper::handle_food_item(ln); // create food item
+            food.insert(std::pair<string,inventory::food_item>(item.get_upc(), item)); // add food item to map
         }
         else if(command == "Warehouse")
         {
             string ln = line;
-            inventory::warehouse item = inventory::parser_helper::handle_warehouse(ln);
-            
-            cout << "Warehouse" << endl;
-            cout << item.get_name() << "\n\n";
+            inventory::warehouse item = inventory::parser_helper::handle_warehouse(ln); // create warehouse
+            warehouse.insert(std::pair<string,inventory::warehouse>(item.get_name(), item)); // add warehouse to map
         }
         else if(command == "Start")
         {

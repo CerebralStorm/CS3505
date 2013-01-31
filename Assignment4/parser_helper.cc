@@ -93,7 +93,7 @@ namespace inventory
         //return date item(date);
     }
     
-    request parser_helper::handle_request(std::string line)
+    void parser_helper::handle_request(std::string line)
     {
         std::string word;
         std::stringstream reader(line);
@@ -116,7 +116,7 @@ namespace inventory
         }
     }
     
-    receive parser_helper::handle_receive(std::string line)
+    void parser_helper::handle_receive(std::string line)
     {
         std::string word;
         std::stringstream reader(line);

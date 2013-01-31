@@ -18,16 +18,19 @@ namespace inventory
 {
   class warehouse
   {
+
   public:
     warehouse(std::string name);
 
     // public methods
     std::string get_name();
-    std::map <std::string, std::vector <food_item> > CCTagMap;
+    std::vector<food_item> get_inv();
+    
     //std::map<std::string, food_item::food_item> inv;
 
   private:
-    std::string name;        
+    std::string name;
+    std::vector<food_item> inv;           
   };
 }
 
