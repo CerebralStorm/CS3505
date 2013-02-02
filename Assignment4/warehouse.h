@@ -22,15 +22,14 @@ namespace inventory
   public:
     warehouse(std::string name);
 
+    // member varibales
+    std::vector<food_item> inv; 
+
     // public methods
     std::string get_name();
-    std::vector<food_item> get_inv();
-    
-    //std::map<std::string, food_item::food_item> inv;
 
   private:
-    std::string name;
-    std::vector<food_item> inv;           
+    std::string name;          
   };
 }
 

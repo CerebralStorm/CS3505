@@ -25,9 +25,4 @@ namespace inventory
   {
     return this->name;
   }
-
-  std::vector<food_item> warehouse::get_inv()
-  {
-    return this->inv;
-  }
 }

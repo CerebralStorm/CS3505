@@ -4,7 +4,8 @@
 #include <stdio.h>
 #include <sstream>
 #include <cstdlib>
-#include <map>
+#include <vector>
+#include <iterator>
 #include "warehouse.h"
 #include "food_item.h"
 #include "date.h"
@@ -13,6 +14,8 @@
 using namespace std;
 
 string first_word(const string& line);
+inventory::warehouse * get_warehouse(string s, vector<inventory::warehouse> warehouses);
+inventory::food_item get_food(string upc, vector<inventory::food_item> food);
 
 int main(int argc, char* argv[])
 {
@@ -20,10 +23,9 @@ int main(int argc, char* argv[])
     ifstream inv_file("data1.txt");
     string line;
     string command;
-    typedef map<string, inventory::food_item> food_map;
-    food_map food;
-    map<string, inventory::warehouse> warehouse;
-    food_map iter = food.begin();
+    vector<inventory::warehouse> warehouses;
+    vector<inventory::food_item> food;
+
     
     if (inv_file.is_open())
     {
@@ -37,18 +39,17 @@ int main(int argc, char* argv[])
         {
             string ln = line;
             inventory::food_item item = inventory::parser_helper::handle_food_item(ln); // create food item
-            food.insert(pair<string,inventory::food_item>(item.get_upc(), item)); // add food item to map
+            food.push_back(item); // add food item to map
         }
         else if(command == "Warehouse")
         {
             string ln = line;
             inventory::warehouse item = inventory::parser_helper::handle_warehouse(ln); // create warehouse
-            warehouse.insert(pair<string,inventory::warehouse>(item.get_name(), item)); // add warehouse to map
+            warehouses.push_back(item); // add warehouse to map
         }
         else if(command == "Start")
         {
             string ln = line;
-            inventory::parser_helper::handle_date(ln);
         }
         else if(command == "Receive:")
         {
@@ -56,7 +57,7 @@ int main(int argc, char* argv[])
             stringstream reader(line);
             string upc;
             string quantity;
-            string wareH;
+            string wh;
             int q;
         
             //read through the line until until we reach the end
@@ -69,29 +70,23 @@ int main(int argc, char* argv[])
                     reader >> word;
                     quantity = word;
                     reader >> word;
-                    wareH = word;
+                    wh = word;
                 }
 
             }
 
-            //inventory::food_item f = new inventory::food_item(food[upc].get_upc(), food[upc].get_shelf_life(), food[upc].get_name());
-            //inventory::warehouse WH = warehouse[wareH];
-            
-            // find will return an iterator to the matching element if it is found
-            // or to the end of the map if the key is not found
-            iter = food.find(upc);
-            if (iter != food.end() ) 
-                std::cout << "Value is: " << iter->second << '\n';
-            else
-                std::cout << "Key is not in my_map" << '\n';
-
+            cout << "Receiving ..." << endl;
+            inventory::warehouse *w = get_warehouse(wh, warehouses);
+            inventory::food_item f = get_food(upc, food);            
             q = atoi(quantity.c_str());
+
             for(int i = 0; i < q; i++)
-            {
-                cout << i << ",";
-            }
-            
-            cout << "Receive" << endl;
+            {  
+                inventory::warehouse temp = *w;
+                temp.inv.push_back(f);                
+            }    
+
+            cout << wh << " added " << q << " " << f.get_name() << endl;
         }
         else if(command == "Request:")
         {
@@ -113,4 +108,35 @@ int main(int argc, char* argv[])
 string first_word(const string& line)
 {
     return line.substr(0, line.find(' '));
+}
+
+
+// Helper method returns a pointer to the warehouse whose name matches the passed in string
+inventory::warehouse * get_warehouse(string s, vector<inventory::warehouse> warehouses) 
+{
+    vector<inventory::warehouse>::iterator it;
+
+    for (it = warehouses.begin(); it < warehouses.end(); it++)
+    {
+        if(it->get_name() == s)
+        {
+            return &(*it);
+        } 
+    }
+
+    return 0;
+}
+
+// Helper method returns a food item of the passed in upc
+inventory::food_item get_food(string upc, vector<inventory::food_item> food) 
+{
+    vector<inventory::food_item>::iterator it;
+
+    for (it = food.begin(); it < food.end(); it++)
+    {
+        if(it->get_upc() == upc)
+        {
+            return *it;
+        } 
+    }
 }
