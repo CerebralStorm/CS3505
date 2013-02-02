@@ -108,16 +108,11 @@ int main(int argc, char* argv[])
                     wh = word;
                 }
             }
-
-            cout << "Receiving ..." << endl;           
+          
             q = atoi(quantity.c_str());
-
-            for(int i = 0; i < q; i++)
-            {
-               // warehouses[wh].inv   
-            }
-
-            cout << "warehouse name: " << warehouses[wh].get_name() << endl;
+            food_item f = food[upc];
+            warehouses[wh].inv[f] = q;  
+            cout <<  warehouses[wh].inv[f] << " = " << q << endl;
         }
         else if(command == "Request:")
         {
@@ -143,8 +138,19 @@ int main(int argc, char* argv[])
 
             }
 
-            cout << "Requesting ..." << endl;         
             q = atoi(quantity.c_str());
+            food_item f = food[upc];
+
+            cout <<  warehouses[wh].inv[f];    
+            
+            int amount = warehouses[wh].inv[f] - q;
+            if (amount < 0)
+            {
+                amount = 0;
+            }
+            warehouses[wh].inv[f] = amount;
+
+            cout << " = " << amount << endl;
 
         }
         else if(command == "Next")

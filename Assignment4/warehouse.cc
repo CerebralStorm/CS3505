@@ -17,15 +17,15 @@ namespace inventory
   warehouse::warehouse(std::string n)
   {
     this->name = n;
-    std::vector<food_item> *v = new std::vector<food_item>();
-    this->inv = *v;
+    std::map<food_item, int> *i = new std::map<food_item, int>();
+    this->inv = *i;
   }
 
   warehouse::warehouse()
   {
     this->name = "";
-    std::vector<food_item> *v = new std::vector<food_item>();
-    this->inv = *v;
+    std::map<food_item, int> *i = new std::map<food_item, int>();
+    this->inv = *i;
   }
 
   std::string warehouse::get_name()

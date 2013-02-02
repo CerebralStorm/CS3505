@@ -10,7 +10,7 @@
 #define WAREHOUSE_H
 
 #include <string>
-#include <vector> 
+#include <map> 
 #include "food_item.h"
 
 namespace inventory
@@ -26,7 +26,7 @@ namespace inventory
     std::string get_name();
 
     // member varibales
-    std::vector<food_item> inv; 
+    std::map<food_item, int> inv;
 
     bool operator <(const warehouse& rhs) const
     {

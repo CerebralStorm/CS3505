@@ -22,8 +22,10 @@ namespace inventory
     int get_month();
     int get_day();
     int get_year();
+    std::string get_date();
 
   private:
+    std::string convertInt(int number);
     int month;
     int day;
     int year;     
