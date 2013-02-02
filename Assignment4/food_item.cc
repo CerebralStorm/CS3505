@@ -18,6 +18,13 @@ namespace inventory
     this->name = n;
   }
 
+  food_item::food_item()
+  {
+    this->upc = "";
+    this->shelf_life = 0;
+    this->name = "";
+  }
+
   std::string food_item::get_upc()
   {
     return this->upc;

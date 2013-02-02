@@ -10,7 +10,6 @@
 #define WAREHOUSE_H
 
 #include <string>
-#include <map>
 #include <vector> 
 #include "food_item.h"
 
@@ -21,12 +20,18 @@ namespace inventory
 
   public:
     warehouse(std::string name);
+    warehouse();
+
+    // public methods
+    std::string get_name();
 
     // member varibales
     std::vector<food_item> inv; 
 
-    // public methods
-    std::string get_name();
+    bool operator <(const warehouse& rhs) const
+    {
+      return name < rhs.name;
+    }
 
   private:
     std::string name;          

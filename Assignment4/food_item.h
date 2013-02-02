@@ -17,11 +17,17 @@ namespace inventory
   {
   public:
     food_item(std::string upc, int shelf_life, std::string name);
+    food_item();
 
     // public methods
     std::string get_upc();
     int get_shelf_life();
     std::string get_name();
+
+    bool operator <(const food_item& rhs) const
+    {
+      return shelf_life < rhs.shelf_life;
+    }
 
   private:
     std::string upc;

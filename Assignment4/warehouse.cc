@@ -21,6 +21,13 @@ namespace inventory
     this->inv = *v;
   }
 
+  warehouse::warehouse()
+  {
+    this->name = "";
+    std::vector<food_item> *v = new std::vector<food_item>();
+    this->inv = *v;
+  }
+
   std::string warehouse::get_name()
   {
     return this->name;
