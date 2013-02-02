@@ -32,16 +32,17 @@ namespace inventory
         void add_warehouse(warehouse);
         void add_food_item(food_item);
         void print_report();
+        void print();
         
     private:
         date start;
         std::map<std::string, warehouse> warehouses;
         std::list<food_item> food_items;
-        std::map< std::string, std::list<std::string> > warehouse_out_of_stock;
-        std::list<std::string> out_of_stock_all;
         
         void print_out_of_stock();
+        void print_fully_stocked();
         void register_food_items();
+        void print_upc_name(std::list<food_item>& a_list);
     };
 }
 

@@ -17,69 +17,65 @@ string first_word(const string& line);
 int main(int argc, char* argv[])
 {
     string file_name = argv[1];
-    ifstream inv_file("data1.txt");
+    ifstream inv_file(argv[1]);
     string line;
     string command;
     inventory::warehouse_processor processor;
     
     if (inv_file.is_open())
     {
-      while ( inv_file.good() )
-      {
-          
-        getline(inv_file, line);
-        command = first_word(line);
-          
-        if(command == "FoodItem")
+        while ( inv_file.good() )
         {
-            string ln = line;
-            inventory::food_item item = inventory::parser_helper::handle_food_item(ln);
             
-            processor.add_food_item(item);
-        }
-        else if(command == "Warehouse")
-        {
-            string ln = line;
-            inventory::warehouse item = inventory::parser_helper::handle_warehouse(ln);
+            getline(inv_file, line);
+            command = first_word(line);
             
-            processor.add_warehouse(item);
-        }
-        else if(command == "Start")
-        {
-            string ln = line;
-            inventory::date item = inventory::parser_helper::handle_date(ln);
+            if(command == "FoodItem")
+            {
+                string ln = line;
+                inventory::food_item item = inventory::parser_helper::handle_food_item(ln);
+                
+                processor.add_food_item(item);
+            }
+            else if(command == "Warehouse")
+            {
+                string ln = line;
+                inventory::warehouse item = inventory::parser_helper::handle_warehouse(ln);
+                
+                processor.add_warehouse(item);
+            }
+            else if(command == "Start")
+            {
+                string ln = line;
+                inventory::date item = inventory::parser_helper::handle_date(ln);
+                
+                processor.set_start(item);
+            }
+            else if(command == "Receive:")
+            {
+                string ln = line;
+                inventory::receive item = inventory::parser_helper::handle_receive(ln);
+                
+                processor.process_receive(item);
+            }
+            else if(command == "Request:")
+            {
+                string ln = line;
+                inventory::request item = inventory::parser_helper::handle_request(ln);
+                
+                processor.process_request(item);
+            }
+            else if(command == "Next")
+            {
+                processor.process_next();
+            }
             
-            
         }
-        else if(command == "Receive:")
-        {
-            string ln = line;
-            inventory::receive item = inventory::parser_helper::handle_receive(ln);
-            
-            cout << "Receive" << endl;
-            cout << item.get_upc() << endl;
-            cout << item.get_quantity() << endl;
-            cout << item.get_warehouse() << "\n\n";
-        }
-        else if(command == "Request:")
-        {
-            string ln = line;
-            inventory::request item = inventory::parser_helper::handle_request(ln);
-            
-            cout << "Request" << endl;
-            cout << item.get_upc() << endl;
-            cout << item.get_quantity() << endl;
-            cout << item.get_warehouse() << "\n\n";
-        }
-        else if(command == "Next")
-        {
-          //cout << "Recognized Next Day" << endl;
-        }
-
-      }
-      inv_file.close();
+        inv_file.close();
+        return 0;
+        processor.print_report();
     }
-  return 0;
+    return 0;
 }
 
 string first_word(const string& line)

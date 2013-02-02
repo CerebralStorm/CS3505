@@ -106,6 +106,25 @@ namespace inventory
         return out_of_stock;
     }
     
+    /*
+     * Returns a list of stocked items
+     */
+    std::list<std::string> warehouse::fully_stocked_items()
+    {
+        std::list<std::string> stocked;
+        //loop through and add any out of stock items to the list
+        for (std::map< std::string, food_item>::iterator iterator = inv.begin(); iterator != inv.end(); ++iterator)
+        {
+            food_item item = iterator->second;
+            //if the item is empty, add the upc to the list
+            if (!item.is_empty()){
+                stocked.push_back(item.get_upc());
+            }
+        }
+        
+        return stocked;
+    }
+    
     std::string warehouse::get_name() const
     {
         return name;

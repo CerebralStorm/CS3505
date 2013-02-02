@@ -99,20 +99,111 @@ namespace inventory
         std::cout << "Report by Andres Monroy and Cody Tanner" << "\n\n";
         
         print_out_of_stock();
+        print_fully_stocked();
     }
     
     void warehouse_processor::print_out_of_stock()
     {
-        std::cout << "Unstocked Products" << std::endl;
+        std::cout << "Unstocked Products:" << std::endl;
+        
+        std::map< std::string, std::string > out_of_stock_pairs;
+        std::list<food_item> out_of_stock_all;
         
         //loop through the warehouses and add all out of stock items from
         //each warehouse to a list
         for (std::map< std::string, warehouse>::iterator iterator = warehouses.begin(); iterator != warehouses.end(); ++iterator)
         {
+            //extract the items out of stock for this warehouse
             warehouse house = iterator->second;
-            warehouse_out_of_stock[house.get_name()] = house.out_of_stock_items();
+            std::list<std::string> items_out = house.out_of_stock_items();
+            
+            //loop through the upc and pair the warehouse an item is
+            //missing in with its upc
+            for (std::list<std::string>::iterator iterator = items_out.begin(); iterator != items_out.end(); ++iterator)
+            {
+                std::string upc = *iterator;
+                out_of_stock_pairs[upc] = house.get_name();
+            }
         }
         
+        //if the number of times a upc pair appears in the map is
+        //equal to the number of warehouses, it is missing from all warehouses
+        for (std::list<food_item>::iterator it = food_items.begin(); it != food_items.end(); ++it)
+        {
+            std::string upc = it->get_upc();
+            if(out_of_stock_pairs.count(upc) == warehouses.size()){
+                out_of_stock_all.push_back(*it);
+            }
+        }
         
+        print_upc_name(out_of_stock_all);
     }
+    
+    void warehouse_processor::print_fully_stocked()
+    {
+        std::cout << "Fully Stocked Products:" << std::endl;
+
+        std::map< std::string, std::string > fully_stocked_pairs;
+        std::list<food_item> fully_stocked_all;
+        
+        //loop through the warehouses and add all fully stocked items from
+        //each warehouse to a list
+        for (std::map< std::string, warehouse>::iterator iterator = warehouses.begin(); iterator != warehouses.end(); ++iterator)
+        {
+            //extract the items fully stocked for this warehouse
+            warehouse house = iterator->second;
+            std::list<std::string> stocked = house.fully_stocked_items();
+            
+            //loop through the upc and pair the warehouse an item is
+            //missing in with its upc
+            for (std::list<std::string>::iterator iterator = stocked.begin(); iterator != stocked.end(); ++iterator)
+            {
+                std::string upc = *iterator;
+                fully_stocked_pairs[upc] = house.get_name();
+            }
+        }
+        
+        //if the number of times a upc pair appears in the map is
+        //equal to the number of warehouses, it is stocked in all warehouses
+        for (std::list<food_item>::iterator it = food_items.begin(); it != food_items.end(); ++it)
+        {
+            std::string upc = it->get_upc();
+            if(fully_stocked_pairs.count(upc) == warehouses.size()){
+                fully_stocked_all.push_back(*it);
+            }
+        }
+        
+        print_upc_name(fully_stocked_all);
+    }
+    
+    /*
+     * Print the upc and name of every item in the list
+     */
+    void warehouse_processor::print_upc_name(std::list<food_item>& a_list)
+    {
+        //print out the upc and name to the screen
+        for (std::list<food_item>::iterator it = a_list.begin(); it != a_list.end(); ++it)
+        {
+            food_item item = *it;
+            std::cout << item.get_upc() << "\t" << item.get_name() << std::endl;
+        }
+        
+        std::cout << "\n";
+    }
+    
+    void warehouse_processor::print()
+    {
+        for (std::map< std::string, warehouse>::iterator iterator = warehouses.begin(); iterator != warehouses.end(); ++iterator)
+        {
+            warehouse house = iterator->second;
+            std::cout << house.get_name() << std::endl;
+        }
+        
+        for (std::list<food_item>::iterator it = food_items.begin(); it != food_items.end(); ++it)
+        {
+            food_item item = *it;
+            std::cout << item.get_upc() << std::endl;
+        }
+    }
+
 }

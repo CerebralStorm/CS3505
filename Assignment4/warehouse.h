@@ -34,6 +34,7 @@ namespace inventory
       void handle_receive(receive);
       void handle_request(request);
       std::list<std::string> out_of_stock_items();
+      std::list<std::string> fully_stocked_items();
       
   private:
       std::string name;
