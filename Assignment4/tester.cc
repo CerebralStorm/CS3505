@@ -9,7 +9,6 @@
 #include "warehouse.h"
 #include "food_item.h"
 #include "date.h"
-#include "parser_helper.h"
 
 using namespace std;
 
@@ -36,15 +35,52 @@ int main(int argc, char* argv[])
           
         if(command == "FoodItem")
         {
-            string ln = line;
-            inventory::food_item item = inventory::parser_helper::handle_food_item(ln); // create food item
-            food[item.get_upc()] = item;
+            string word;
+            stringstream reader(line);
+            string upc;
+            string shelf_life;
+            string name;
+        
+            //read through the line until until we reach the end
+            while (reader.good()){
+                reader >> word;
+                if (word.compare("Code:") == 0){
+                    //read one more word to get the upc code
+                    reader >> word;
+                    upc = word;
+                }
+                else if(word.compare("life:") == 0){
+                    reader >> word;
+                    shelf_life = word;
+                }
+                else if(word.compare("Name:") == 0){
+                    //read in the rest of the line
+                    while(reader >> word){
+                        //reader >> word;
+                        name += word + " ";
+                    }
+                }
+            }
+
+            food[upc] = food_item(upc, atoi(shelf_life.c_str()), name);
         }
         else if(command == "Warehouse")
         {
-            string ln = line;
-            inventory::warehouse wareh = inventory::parser_helper::handle_warehouse(ln); // create warehouse
-            warehouses[wareh.get_name()] = wareh;
+            string word;
+            stringstream reader(line);
+            string name;
+            
+            //read through the line until until we reach the end
+            while (reader.good()){
+                reader >> word;
+                if (word.compare("-") == 0){
+                    //read one more word to get the upc code
+                    reader >> word;
+                    name = word;
+                }
+            }
+        
+            warehouses[name] = warehouse(name);
         }
         else if(command == "Start")
         {
@@ -75,6 +111,11 @@ int main(int argc, char* argv[])
 
             cout << "Receiving ..." << endl;           
             q = atoi(quantity.c_str());
+
+            for(int i = 0; i < q; i++)
+            {
+               // warehouses[wh].inv   
+            }
 
             cout << "warehouse name: " << warehouses[wh].get_name() << endl;
         }
