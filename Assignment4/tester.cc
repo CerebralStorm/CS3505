@@ -8,6 +8,7 @@
 #include "parser_helper.h"
 #include "receive.h"
 #include "request.h"
+#include "warehouse_processor.h"
 
 using namespace std;
 
@@ -19,6 +20,7 @@ int main(int argc, char* argv[])
     ifstream inv_file("data1.txt");
     string line;
     string command;
+    inventory::warehouse_processor processor;
     
     if (inv_file.is_open())
     {
@@ -33,23 +35,21 @@ int main(int argc, char* argv[])
             string ln = line;
             inventory::food_item item = inventory::parser_helper::handle_food_item(ln);
             
-            cout << "FoodItem" << endl;
-            cout << item.get_upc() << endl;
-            cout << item.get_shelf_life() << endl;
-            cout << item.get_name() << "\n\n";
+            processor.add_food_item(item);
         }
         else if(command == "Warehouse")
         {
             string ln = line;
             inventory::warehouse item = inventory::parser_helper::handle_warehouse(ln);
             
-            cout << "Warehouse" << endl;
-            cout << item.get_name() << "\n\n";
+            processor.add_warehouse(item);
         }
         else if(command == "Start")
         {
             string ln = line;
-            inventory::parser_helper::handle_date(ln);
+            inventory::date item = inventory::parser_helper::handle_date(ln);
+            
+            
         }
         else if(command == "Receive:")
         {

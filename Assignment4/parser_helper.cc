@@ -15,6 +15,8 @@
 #include "date.h"
 #include "request.h"
 #include "receive.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 namespace inventory
 {
@@ -71,11 +73,11 @@ namespace inventory
         return warehouse(name);
     }
 
-    void parser_helper::handle_date(std::string line)
+    date parser_helper::handle_date(std::string line)
     {
         std::string word;
         std::stringstream reader(line);
-        std::string date;
+        std::string start;
         
         //read through the line until until we reach the end
         while (reader.good()){
@@ -83,15 +85,11 @@ namespace inventory
             if (word.compare("date:") == 0){
                 //read one more word to get the upc code
                 reader >> word;
-                date = word;
+                start = word;
             }
         }
         
-        std::cout << "Date" << std::endl;
-        std::cout << date << "\n\n";
-        
-        //create the object to return
-        //return date item(date);
+        return date(start);
     }
     
     request parser_helper::handle_request(std::string line)

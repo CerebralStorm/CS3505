@@ -16,17 +16,25 @@ namespace inventory
   class date
   {
   public:
-    date(int month, int day, int year); //  constructor with parameter
-
-    // public methods
-    int get_month();
-    int get_day();
-    int get_year();
-
+      date();
+      date(std::string date); //  constructor with parameter
+      date(const date& other);
+      const date& operator= (const date& rhs);
+      
+      // public methods
+      int get_month();
+      int get_day();
+      int get_year();
+      
+      void add_day();
+      
   private:
-    int month;
-    int day;
-    int year;     
+      int month;
+      int day;
+      int year;
+      bool is_leap_year();
+      bool has_31_days();
+      void next_month();
   };
 }
 

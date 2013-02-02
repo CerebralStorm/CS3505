@@ -23,7 +23,7 @@ namespace inventory
     public:
         static food_item handle_food_item(std::string line);
         static warehouse handle_warehouse(std::string line);
-        static void handle_date(std::string line);
+        static date handle_date(std::string line);
         static request handle_request(std::string line);
         static receive handle_receive(std::string line);
     private:
