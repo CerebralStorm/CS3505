@@ -24,7 +24,7 @@ namespace inventory
         start = time;
         
         //add the food_items to each warehouse
-        register_food_items();
+        register_food_items(time);
     }
     
     /*
@@ -54,7 +54,7 @@ namespace inventory
         //loop through each warehouse and update shelf lives
         for (std::map< std::string, warehouse>::iterator iterator = warehouses.begin(); iterator != warehouses.end(); ++iterator)
         {
-            iterator->second.move_to_next_day();
+            iterator->second.move_to_next_day(start);
         }
         
         //add one day
@@ -80,12 +80,13 @@ namespace inventory
     /*
      * Registers all the food items with each warehouse.
      */
-    void warehouse_processor::register_food_items()
+    void warehouse_processor::register_food_items(date time)
     {
         //loop through all warehouses and register each food_item in
         //each warehouse
         for (std::map< std::string, warehouse>::iterator it1 = warehouses.begin(); it1 != warehouses.end(); ++it1)
         {
+            it1->second.set_busiest(time);
             //loop through the food_item set and add all food items
             for (std::list<food_item>::iterator it2 = food_items.begin(); it2 != food_items.end(); ++it2)
             {
@@ -94,19 +95,23 @@ namespace inventory
         }
     }
     
+    /*
+     * Print out the report
+     */
     void warehouse_processor::print_report()
     {
         std::cout << "Report by Andres Monroy and Cody Tanner" << "\n\n";
         
         print_out_of_stock();
         print_fully_stocked();
+        print_busiest_days();
     }
     
     void warehouse_processor::print_out_of_stock()
     {
         std::cout << "Unstocked Products:" << std::endl;
         
-        std::map< std::string, std::string > out_of_stock_pairs;
+        std::multimap< std::string, std::string > out_of_stock_pairs;
         std::list<food_item> out_of_stock_all;
         
         //loop through the warehouses and add all out of stock items from
@@ -122,7 +127,7 @@ namespace inventory
             for (std::list<std::string>::iterator iterator = items_out.begin(); iterator != items_out.end(); ++iterator)
             {
                 std::string upc = *iterator;
-                out_of_stock_pairs[upc] = house.get_name();
+                out_of_stock_pairs.insert ( std::pair<std::string, std::string>(upc, house.get_name()));
             }
         }
         
@@ -135,7 +140,6 @@ namespace inventory
                 out_of_stock_all.push_back(*it);
             }
         }
-        
         print_upc_name(out_of_stock_all);
     }
     
@@ -143,7 +147,7 @@ namespace inventory
     {
         std::cout << "Fully Stocked Products:" << std::endl;
 
-        std::map< std::string, std::string > fully_stocked_pairs;
+        std::multimap< std::string, std::string > fully_stocked_pairs;
         std::list<food_item> fully_stocked_all;
         
         //loop through the warehouses and add all fully stocked items from
@@ -154,12 +158,11 @@ namespace inventory
             warehouse house = iterator->second;
             std::list<std::string> stocked = house.fully_stocked_items();
             
-            //loop through the upc and pair the warehouse an item is
-            //missing in with its upc
+            //loop through the upc and pair the warehouse with its item
             for (std::list<std::string>::iterator iterator = stocked.begin(); iterator != stocked.end(); ++iterator)
             {
                 std::string upc = *iterator;
-                fully_stocked_pairs[upc] = house.get_name();
+                fully_stocked_pairs.insert ( std::pair<std::string, std::string>(upc, house.get_name()));
             }
         }
         
@@ -172,7 +175,6 @@ namespace inventory
                 fully_stocked_all.push_back(*it);
             }
         }
-        
         print_upc_name(fully_stocked_all);
     }
     
@@ -191,18 +193,18 @@ namespace inventory
         std::cout << "\n";
     }
     
-    void warehouse_processor::print()
+    /*
+     * Print the busiest days in each warehouse
+     */
+    void warehouse_processor::print_busiest_days()
     {
+        std::cout << "Busiest Days:" << std::endl;
+
+        //loop through warehouses and print the busy days
         for (std::map< std::string, warehouse>::iterator iterator = warehouses.begin(); iterator != warehouses.end(); ++iterator)
         {
             warehouse house = iterator->second;
-            std::cout << house.get_name() << std::endl;
-        }
-        
-        for (std::list<food_item>::iterator it = food_items.begin(); it != food_items.end(); ++it)
-        {
-            food_item item = *it;
-            std::cout << item.get_upc() << std::endl;
+            std::cout << house.get_name() << " " << house.get_busiest().get_date() << " " << house.get_transactions() << std::endl;
         }
     }
 

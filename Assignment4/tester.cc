@@ -72,7 +72,6 @@ int main(int argc, char* argv[])
             
         }
         inv_file.close();
-        return 0;
         processor.print_report();
     }
     return 0;

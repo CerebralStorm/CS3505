@@ -7,6 +7,7 @@
 
 #include <string>
 #include "food_item.h"
+#include <iostream>
 
 namespace inventory
 {
@@ -99,13 +100,23 @@ namespace inventory
      */
     void food_item::next_day()
     {
-        for (std::list<int>::iterator iterator = items.begin(), end = items.end(); iterator != end; ++iterator) {
-            *iterator--;
+        for (std::list<int>::iterator iterator = items.begin(), next, end = items.end(); iterator != end; iterator = next) {
+            next = iterator;
+            ++next;
+            
+            int val = *iterator;
+            val--;
             
             //check for removal of expired item
-            if(*iterator == 0)
-                iterator = items.erase(iterator);
+            if(val == 0)
+                items.erase(iterator);
+            else
+                *iterator = val;
         }
+        
+        //reset counters for busy day
+        receive_count = 0;
+        request_count = 0;
     }
     
     /*
@@ -113,6 +124,8 @@ namespace inventory
      */
     bool food_item::is_empty()
     {
+//        std::cout << upc << "\t" << receive_count << std::endl;
+//        std::cout << upc << "\t" << request_count << std::endl;
         return items.size() == 0;
     }
     
@@ -131,11 +144,11 @@ namespace inventory
     {
         return name;
     }
-    long food_item::get_receive_count() const
+    int food_item::get_receive_count() const
     {
         return receive_count;
     }
-    long food_item::get_request_count() const
+    int food_item::get_request_count() const
     {
         return request_count;
     }

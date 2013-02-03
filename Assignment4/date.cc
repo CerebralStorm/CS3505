@@ -106,4 +106,34 @@ namespace inventory
     {
         return year;
     }
+    std::string date::get_date()
+    {
+        std::ostringstream convert;
+        std::string d;
+        std::string m;
+        std::string y;
+        
+        if (day < 10){
+            convert << "0";
+            convert << day;
+        }
+        else{
+            convert << day;
+        }
+        
+        convert << "/";
+        
+        if (month < 10){
+            convert << "0";
+            convert << month;
+        }
+        else{
+            convert << month;
+        }
+        
+        convert << "/";
+        convert << year;
+        
+        return convert.str();
+    }
 }

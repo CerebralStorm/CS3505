@@ -27,8 +27,8 @@ namespace inventory
       std::string get_upc() const;
       int get_shelf_life() const;
       std::string get_name() const;
-      long get_receive_count() const;
-      long get_request_count() const;
+      int get_receive_count() const;
+      int get_request_count() const;
       void receive_items(int quantity);
       void request_items(int quantity);
       void next_day();
@@ -39,8 +39,8 @@ namespace inventory
       int shelf_life;
       std::string name;
       std::list<int> items;
-      long receive_count;
-      long request_count;
+      int receive_count;
+      int request_count;
       
       void remove_expired();
   };

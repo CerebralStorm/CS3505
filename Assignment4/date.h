@@ -10,6 +10,7 @@
 #define DATE_H
 
 #include<string>
+#include <sstream>
 
 namespace inventory
 {
@@ -25,7 +26,7 @@ namespace inventory
       int get_month();
       int get_day();
       int get_year();
-      
+      std::string get_date();
       void add_day();
       
   private:

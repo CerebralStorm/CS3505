@@ -32,7 +32,6 @@ namespace inventory
         void add_warehouse(warehouse);
         void add_food_item(food_item);
         void print_report();
-        void print();
         
     private:
         date start;
@@ -41,8 +40,9 @@ namespace inventory
         
         void print_out_of_stock();
         void print_fully_stocked();
-        void register_food_items();
+        void register_food_items(date);
         void print_upc_name(std::list<food_item>& a_list);
+        void print_busiest_days();
     };
 }
 
