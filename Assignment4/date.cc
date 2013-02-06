@@ -92,6 +92,10 @@ namespace inventory
         return (month < 8 && month % 2 != 0) || (month >=8 && month % 2 == 0);
     }
     
+    
+    /*
+     * Accessor Methods
+     */
     int date::get_month()
     {
         return month;

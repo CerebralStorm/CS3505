@@ -71,6 +71,7 @@ namespace inventory
         //from the shelf life
         for (std::map< std::string, food_item>::iterator iterator = inv.begin(); iterator != inv.end(); ++iterator)
         {
+            //keep track of the transactions for the day
             transactions += iterator->second.get_receive_count();
             transactions += iterator->second.get_request_count();
             iterator->second.next_day();
@@ -138,6 +139,10 @@ namespace inventory
         return stocked;
     }
     
+    
+    /*
+     * Accessor Methods
+     */
     void warehouse::set_busiest(date time)
     {
         busiest = time;
