@@ -888,10 +888,17 @@ static av_cold int png_dec_init(AVCodecContext *avctx)
     return 0;
 }
 
+static int display_png_load_message = 1;
 static av_cold int png_dec_end(AVCodecContext *avctx)
 {
     PNGDecContext *s = avctx->priv_data;
-
+    if(display_png_load_message == 1)
+    {
+        printf("\n\n*** CS 3505:  Executing png_dec_end in the file pngdec.c ***\n");
+        printf("*** CS 3505:  Altered by Cody Tanner and Benjamin Rogers ***\n\n");
+        display_png_load_message = 0;        
+    }
+	
     if (s->picture1.data[0])
         avctx->release_buffer(avctx, &s->picture1);
     if (s->picture2.data[0])
