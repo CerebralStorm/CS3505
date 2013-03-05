@@ -2523,6 +2523,14 @@ static const AVCodecDescriptor codec_descriptors[] = {
         .name      = "klv",
         .long_name = NULL_IF_CONFIG_SMALL("SMPTE 336M Key-Length-Value (KLV) metadata"),
     },
+    // UTAH description
+    {
+    .id   = AV_CODEC_ID_UTAH,
+    .type   = AVMEDIA_TYPE_VIDEO,
+    .name   = "utah",
+    .long_name = NULL_IF_CONFIG_SMALL("UTAH (Built for CS 3505 in U of U) image"),
+    .props   = AV_CODEC_PROP_LOSSY,
+    },
 
 };
 
