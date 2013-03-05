@@ -8,5 +8,5 @@ Description: FFmpeg audio/video filtering library
 Version: 3.38.103
 Requires: libswresample = 0.17.102, libswscale = 2.2.100, libavformat = 54.63.100, libavcodec = 54.92.100, libavutil = 52.17.102
 Conflicts:
-Libs: -L${libdir} -lavfilter -ldl -lasound -lSDL -lpthread -lm -pthread -lz -lrt
+Libs: -L${libdir} -lavfilter -ldl -lm -pthread -lz -lrt
 Cflags: -I${includedir}
