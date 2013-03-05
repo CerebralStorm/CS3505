@@ -98,7 +98,6 @@ enum AVCodecID {
     AV_CODEC_ID_NONE,
 
     /* video codecs */
-    AV_CODEC_ID_UTAH,
     AV_CODEC_ID_MPEG1VIDEO,
     AV_CODEC_ID_MPEG2VIDEO, ///< preferred ID for MPEG-1/2 video decoding
     AV_CODEC_ID_MPEG2VIDEO_XVMC,
@@ -269,6 +268,7 @@ enum AVCodecID {
     AV_CODEC_ID_CLLC,
     AV_CODEC_ID_MSS2,
     AV_CODEC_ID_VP9,
+    AV_CODEC_ID_UTAH,
     AV_CODEC_ID_BRENDER_PIX= MKBETAG('B','P','I','X'),
     AV_CODEC_ID_Y41P       = MKBETAG('Y','4','1','P'),
     AV_CODEC_ID_ESCAPE130  = MKBETAG('E','1','3','0'),
