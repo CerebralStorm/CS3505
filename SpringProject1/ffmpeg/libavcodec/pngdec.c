@@ -872,7 +872,7 @@ static int decode_frame(AVCodecContext *avctx,
     goto the_end;
 }
 
-static av_cold int png_dec_init(AVCodecContext *avctx)
+static av_cold int png_dec_init(AVCodecContext *avctx)  // cold = not used often 
 {
     PNGDecContext *s = avctx->priv_data;
 
@@ -908,13 +908,13 @@ static av_cold int png_dec_end(AVCodecContext *avctx)
 }
 
 AVCodec ff_png_decoder = {
-    .name           = "png",
+    .name           = "png",  // change name 
     .type           = AVMEDIA_TYPE_VIDEO,
-    .id             = AV_CODEC_ID_PNG,
+    .id             = AV_CODEC_ID_PNG, // needs to be utah
     .priv_data_size = sizeof(PNGDecContext),
     .init           = png_dec_init,
     .close          = png_dec_end,
     .decode         = decode_frame,
     .capabilities   = CODEC_CAP_DR1 /*| CODEC_CAP_DRAW_HORIZ_BAND*/,
-    .long_name      = NULL_IF_CONFIG_SMALL("PNG (Portable Network Graphics) image"),
+    .long_name      = NULL_IF_CONFIG_SMALL("PNG (Portable Network Graphics) image"), // need to change 
 };
