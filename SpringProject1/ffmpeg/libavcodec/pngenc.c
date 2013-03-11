@@ -434,7 +434,7 @@ static int encode_frame(AVCodecContext *avctx, AVPacket *pkt,
     goto the_end;
 }
 
-static av_cold int png_enc_init(AVCodecContext *avctx){
+static av_cold int png_enc_init(AVCodecContext *avctx){ // need to modify
     PNGEncContext *s = avctx->priv_data;
 
     avcodec_get_frame_defaults(&s->picture);
@@ -449,7 +449,7 @@ static av_cold int png_enc_init(AVCodecContext *avctx){
 }
 
 AVCodec ff_png_encoder = {
-    .name           = "png",
+    .name           = "png",  // we want to change the name to UTAH
     .type           = AVMEDIA_TYPE_VIDEO,
     .id             = AV_CODEC_ID_PNG,
     .priv_data_size = sizeof(PNGEncContext),
@@ -457,7 +457,7 @@ AVCodec ff_png_encoder = {
     .encode2        = encode_frame,
     .capabilities   = CODEC_CAP_FRAME_THREADS | CODEC_CAP_INTRA_ONLY,
     .pix_fmts       = (const enum AVPixelFormat[]){
-        AV_PIX_FMT_RGB24, AV_PIX_FMT_RGBA,
+        AV_PIX_FMT_RGB24, AV_PIX_FMT_RGBA,   // we want to down grade it to only use one of these.
         AV_PIX_FMT_RGB48BE, AV_PIX_FMT_RGBA64BE,
         AV_PIX_FMT_PAL8,
         AV_PIX_FMT_GRAY8, AV_PIX_FMT_GRAY8A,
