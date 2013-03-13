@@ -5,52 +5,81 @@
 #include "internal.h"
 #include "utah.h"
 
-typedef struct UTAHDecContext {
-    AVCodecContext *avctx;
-
-    int state;
-    int width, height;
-    int bit_depth;
-    int color_type;
-    int compression_type;
-    int interlace_type;
-    int filter_type;
-    int channels;
-    int bits_per_pixel;
-    int bpp;
-
-    uint8_t *image_buf;
-    int image_linesize;
-    uint32_t palette[256];
-    uint8_t *crow_buf;
-    uint8_t *last_row;
-    uint8_t *tmp_row;
-    int pass;
-    int crow_size; /* compressed row size (include filter type) */
-    int row_size; /* decompressed row size */
-    int pass_row_size; /* decompress row size of the current pass */
-    int y;
-} UTAHDecContext;
+typedef struct UTAHContext {
+    AVFrame picture;
+} UTAHContext;
 
 static int decode_frame(AVCodecContext *avctx,
                         void *data, int *got_frame,
                         AVPacket *avpkt)
 {
-    UTAHDecContext * const s = avctx->priv_data;
+    const uint8_t *buf = avpkt->data;
+    int buf_size       = avpkt->size;
+    UTAHContext *s  = avctx->priv_data;
+    AVFrame *picture   = data;
+    AVFrame *p         = &s->picture;
+    int width, height;
+    unsigned int hsize;
+    int i, n, linesize, ret;
+    uint8_t *ptr;
+    const uint8_t *buf0 = buf;
 
-    return 0;
+    hsize  = bytestream_get_byte(&buf); /* header size */
+    width = bytestream_get_le32(&buf);
+    height = bytestream_get_le32(&buf);
+
+    av_log(avctx, AV_LOG_INFO, "hsize: %d \n", hsize);
+    av_log(avctx, AV_LOG_INFO, "Width: %d \n", width);
+    av_log(avctx, AV_LOG_INFO, "Height: %d \n", height);
+
+    n = width;
+    avctx->width  = width;
+    avctx->height = height; /*> 0 ? height : -height;*/
+    avctx->pix_fmt = AV_PIX_FMT_RGB8;
+    
+    ptr = p->data[0];
+    linesize = p->linesize[0];
+
+    p->reference = 0;
+    if ((ret = ff_get_buffer(avctx, p)) < 0) {
+        av_log(avctx, AV_LOG_ERROR, "get_buffer() failed\n");
+        return ret;
+    }
+    p->pict_type = AV_PICTURE_TYPE_I;
+    p->key_frame = 1;
+
+    buf   = buf0 + hsize;
+
+    for (i = 0; i < avctx->height; i++) {
+        av_log(avctx, AV_LOG_INFO, "Inside for loop \n");
+        memcpy(ptr, buf, n);
+        buf += n;
+        ptr += linesize;
+    }
+
+    *picture = s->picture;
+    *got_frame = 1;
+
+    return buf_size;
 }
 
 static av_cold int utah_dec_init(AVCodecContext *avctx)
 {
-    UTAHDecContext *s = avctx->priv_data;
+    UTAHContext *s = avctx->priv_data;
+
+    avcodec_get_frame_defaults(&s->picture);
+    avctx->coded_frame = &s->picture;
+    avctx->bits_per_coded_sample = 8;
 
     return 0;
 }
 
 static av_cold int utah_dec_end(AVCodecContext *avctx)
 {
-    UTAHDecContext *s = avctx->priv_data;
+    UTAHContext *s = avctx->priv_data;
+    
+    if (s->picture.data[0])
+        avctx->release_buffer(avctx, &s->picture);
 
     return 0;
 }
@@ -63,6 +92,6 @@ AVCodec ff_utah_decoder = {
     .init           = utah_dec_init,
     .close          = utah_dec_end,
     .decode         = decode_frame,
-    .capabilities   = NULL,
+    .capabilities   = CODEC_CAP_DR1,
     .long_name      = NULL_IF_CONFIG_SMALL("UTAH (Built for CS 3505 in U of U) image"),
 };

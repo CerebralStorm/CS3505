@@ -1,4 +1,4 @@
-prefix=/usr/local
+prefix=/home/ctanner/CS3505/SpringProject1/ffmpeg
 exec_prefix=${prefix}
 libdir=${prefix}/lib
 includedir=${prefix}/include
@@ -9,6 +9,6 @@ Version: 54.3.103
 Requires: libavfilter = 3.38.103, libavformat = 54.63.100
 Requires.private: 
 Conflicts:
-Libs: -L${libdir} -lavdevice -ldl -lm -pthread -lz -lrt
+Libs: -L${libdir} -lavdevice -ldl -lasound -lSDL -lpthread -lm -pthread -lz -lrt
 Libs.private: 
 Cflags: -I${includedir}
