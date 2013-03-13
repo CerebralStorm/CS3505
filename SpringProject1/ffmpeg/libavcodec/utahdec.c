@@ -28,17 +28,10 @@ static int decode_frame(AVCodecContext *avctx,
     width = bytestream_get_le32(&buf);
     height = bytestream_get_le32(&buf);
 
-    av_log(avctx, AV_LOG_INFO, "hsize: %d \n", hsize);
-    av_log(avctx, AV_LOG_INFO, "Width: %d \n", width);
-    av_log(avctx, AV_LOG_INFO, "Height: %d \n", height);
-
     n = width;
     avctx->width  = width;
     avctx->height = height; /*> 0 ? height : -height;*/
-    avctx->pix_fmt = AV_PIX_FMT_RGB8;
-    
-    ptr = p->data[0];
-    linesize = p->linesize[0];
+    avctx->pix_fmt = AV_PIX_FMT_RGB8;    
 
     p->reference = 0;
     if ((ret = ff_get_buffer(avctx, p)) < 0) {
@@ -47,11 +40,12 @@ static int decode_frame(AVCodecContext *avctx,
     }
     p->pict_type = AV_PICTURE_TYPE_I;
     p->key_frame = 1;
+    ptr = p->data[0];
+    linesize = p->linesize[0];
 
-    buf   = buf0 + hsize;
+    buf = buf0 + hsize;
 
     for (i = 0; i < avctx->height; i++) {
-        av_log(avctx, AV_LOG_INFO, "Inside for loop \n");
         memcpy(ptr, buf, n);
         buf += n;
         ptr += linesize;

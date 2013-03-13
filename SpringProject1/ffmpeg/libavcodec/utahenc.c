@@ -21,10 +21,11 @@ static int encode_frame(AVCodecContext *avctx, AVPacket *pkt,
     p->pict_type= AV_PICTURE_TYPE_I;
     p->key_frame= 1;
 
-    n_bytes_image = pict->height * pict->width;
+    n_bytes_per_row = pict->width;
+    n_bytes_image = avctx->height * n_bytes_per_row;
+
     hsize = 9;
     n_bytes = n_bytes_image + hsize;
-
     if ((ret = ff_alloc_packet2(avctx, pkt, n_bytes)) < 0)
         return ret;
     buf = pkt->data;                
