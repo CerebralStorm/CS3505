@@ -28,11 +28,11 @@ void SaveFrame(AVFrame *pFrame, int width, int height, int iFrame) {
     return;
   
   // Write header
-  fprintf(pFile, "P6\n%d %d\n255\n", width, height);
+  fprintf(pFile, "9 %d %d\n", width, height);
   
   // Write pixel data
   for(y=0; y<height; y++)
-    fwrite(pFrame->data[0]+y*pFrame->linesize[0], 1, width*3, pFile);
+    fwrite(pFrame->data[0]+y*pFrame->linesize[0], 1, width, pFile);
   
   // Close file
   fclose(pFile);
