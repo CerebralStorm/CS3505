@@ -1,2 +1,0 @@
-ffmpeg -i 'img-%03d.png' -r 1 out.avi
-

@@ -1,11 +1,11 @@
 all: a.out
 
-a.out: test.cc
-	g++ -I ../ffmpeg/include/ -L../ffmpeg/lib test.cc `pkg-config --cflags --libs libavutil libavformat libavcodec`
+a.out: tutorial2.cc
+	g++ -I ../ffmpeg/include/ -L../ffmpeg/lib test.cc `pkg-config --cflags --libs libavutil libavformat libavcodec libswscale`
 
 clean: 
 	rm -f *.o *.utah a.out
 
 movie: 
-	
+	./a.out test.jpg
 

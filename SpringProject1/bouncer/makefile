@@ -1,7 +1,7 @@
 all: a.out
 
 a.out: test.cc
-	g++ -I ../ffmpeg/include/ -L../ffmpeg/lib test.cc `pkg-config --cflags --libs libavutil libavformat libavcodec`
+	g++ -I ../ffmpeg/include/ -L../ffmpeg/lib test.cc `pkg-config --cflags --libs libavutil libavformat libavcodec libswscale`
 
 clean: 
 	rm -f *.o *.utah a.out
