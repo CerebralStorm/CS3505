@@ -7,5 +7,5 @@ clean:
 	rm -f *.o *.utah a.out
 
 movie: 
-	
+	./a.out test.jpg
 

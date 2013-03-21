@@ -12,19 +12,34 @@
 extern "C"
 {
 
-#include "libavutil/mathematics.h"
+#include "libavcodec/avcodec.h"
+#include "libavformat/avformat.h"
 
 }
 
 using namespace std;
 
-int main ()
+int main (int argc, char *argv[])
 {
-  int64_t result;
+	av_register_all();	
+	AVFormatContext* pFormatCtx = avformat_alloc_context();
+	
+	// Open Image
+	if ((avformat_open_input(&pFormatCtx, argv[1], NULL, NULL)) < 0) {
+		printf("Error loading image");
+		return -1;
+    }
+	
+	// Retrieve stream information
+	if ((avformat_find_stream_info(pFormatCtx, NULL)) < 0) {
+		printf("Error loading stream");
+		return -1;
+    }
 
-  result = av_gcd(39, 91);
+	cout << "Success" << endl;
+	
+	// Clean Up
+	avformat_free_context(pFormatCtx);
   
-  cout << "Hello: " << result << endl;
-  
-  return 0;
+	return 0;
 }
