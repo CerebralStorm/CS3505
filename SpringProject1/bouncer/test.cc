@@ -22,17 +22,17 @@ void SaveFrame(AVFrame *pFrame, int width, int height, int iFrame) {
   int  y;
   
   // Open file
-  sprintf(szFilename, "frame%d.utah", iFrame);
+  sprintf(szFilename, "frame%d.ppm", iFrame);
   pFile=fopen(szFilename, "wb");
   if(pFile==NULL)
     return;
   
   // Write header
-  fprintf(pFile, "9 %d %d\n", width, height);
+  fprintf(pFile, "P6\n%d %d\n255\n", width, height);
   
   // Write pixel data
   for(y=0; y<height; y++)
-    fwrite(pFrame->data[0]+y*pFrame->linesize[0], 1, width, pFile);
+    fwrite(pFrame->data[0]+y*pFrame->linesize[0], 1, width*3, pFile);
   
   // Close file
   fclose(pFile);
@@ -54,7 +54,7 @@ int main(int argc, char *argv[]) {
   struct SwsContext      *sws_ctx = NULL;
   
   if(argc < 2) {
-    printf("Please provide an image file\n");
+    printf("Please provide a movie file\n");
     return -1;
   }
   // Register all formats and codecs
@@ -104,7 +104,7 @@ int main(int argc, char *argv[]) {
   
   // Determine required buffer size and allocate buffer
   numBytes=avpicture_get_size(PIX_FMT_RGB24, pCodecCtx->width,
-			      pCodecCtx->height);
+            pCodecCtx->height);
   buffer=(uint8_t *)av_malloc(numBytes*sizeof(uint8_t));
 
   sws_ctx =
@@ -126,7 +126,7 @@ int main(int argc, char *argv[]) {
   // Note that pFrameRGB is an AVFrame, but AVFrame is a superset
   // of AVPicture
   avpicture_fill((AVPicture *)pFrameRGB, buffer, PIX_FMT_RGB24,
-		 pCodecCtx->width, pCodecCtx->height);
+     pCodecCtx->width, pCodecCtx->height);
   
   // Read frames and save first five frames to disk
   i=0;
@@ -135,11 +135,11 @@ int main(int argc, char *argv[]) {
     if(packet.stream_index==videoStream) {
       // Decode video frame
       avcodec_decode_video2(pCodecCtx, pFrame, &frameFinished, 
-			   &packet);
+         &packet);
       
       // Did we get a video frame?
       if(frameFinished) {
-	// Convert the image from its native format to RGB
+  // Convert the image from its native format to RGB
         sws_scale
         (
             sws_ctx,
@@ -150,11 +150,11 @@ int main(int argc, char *argv[]) {
             pFrameRGB->data,
             pFrameRGB->linesize
         );
-	
-	// Save the frame to disk
-	if(++i<=5)
-	  SaveFrame(pFrameRGB, pCodecCtx->width, pCodecCtx->height, 
-		    i);
+  
+  // Save the frame to disk
+  if(++i<=5)
+    SaveFrame(pFrameRGB, pCodecCtx->width, pCodecCtx->height, 
+        i);
       }
     }
     
