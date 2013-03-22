@@ -10,7 +10,7 @@ libavcodec/utahenc.o: libavcodec/utahenc.c libavcodec/avcodec.h \
  libavutil/version.h libavutil/old_pix_fmts.h libavutil/avutil.h \
  libavutil/channel_layout.h libavutil/dict.h libavutil/log.h \
  libavutil/pixfmt.h libavutil/rational.h libavcodec/version.h \
- libavcodec/old_codec_ids.h libavutil/common.h libavcodec/internal.h \
- libavutil/mathematics.h libavcodec/bytestream.h libavutil/intreadwrite.h \
- libavutil/bswap.h libavutil/x86/bswap.h libavutil/x86/intreadwrite.h \
- libavcodec/dsputil.h libavcodec/utah.h
+ libavcodec/old_codec_ids.h libavutil/common.h libavcodec/utah.h \
+ libavcodec/bytestream.h libavutil/intreadwrite.h libavutil/bswap.h \
+ libavutil/x86/bswap.h libavutil/x86/intreadwrite.h libavcodec/internal.h \
+ libavutil/mathematics.h

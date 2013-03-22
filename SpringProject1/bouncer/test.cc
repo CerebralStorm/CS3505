@@ -18,7 +18,7 @@ using namespace std;
 
 int main(int argc, char *argv[]) {
   AVFormatContext *pFormatCtx = NULL;
-  int             i, videoStream;
+  int              videoStream;
   AVCodecContext  *pCodecCtx = NULL;
   AVCodec         *pCodec = NULL;
   AVCodec         *utahCodec = NULL;
@@ -51,10 +51,10 @@ int main(int argc, char *argv[]) {
     return -1; // Couldn't find stream information
   
   // Dump information about file onto standard error
-  av_dump_format(pFormatCtx, 0, argv[1], 0);
+ // av_dump_format(pFormatCtx, 0, argv[1], 0);
   
   // Find the first video stream
-  videoStream=-1;
+  /*videoStream=-1;
   for(i=0; i<pFormatCtx->nb_streams; i++)
     if(pFormatCtx->streams[i]->codec->codec_type==AVMEDIA_TYPE_VIDEO) {
       videoStream=i;
@@ -62,9 +62,9 @@ int main(int argc, char *argv[]) {
     }
   if(videoStream==-1)
     return -1; // Didn't find a video stream
-
+*/
   // Get a pointer to the codec context for the video stream
-  pCodecCtx=pFormatCtx->streams[videoStream]->codec;
+  pCodecCtx=pFormatCtx->streams[0]->codec;
   
   // Find the decoder for the video stream
   pCodec=avcodec_find_decoder(pCodecCtx->codec_id);
@@ -73,7 +73,7 @@ int main(int argc, char *argv[]) {
     return -1; // Codec not found
   }
   // Open codec
-  if(avcodec_open2(pCodecCtx, pCodec, &optionsDict)<0)
+  if(avcodec_open2(pCodecCtx, pCodec, NULL)<0)
     return -1; // Could not open codec
   
   // Allocate video frame
@@ -111,10 +111,9 @@ int main(int argc, char *argv[]) {
      pCodecCtx->width, pCodecCtx->height);
   
   // Read frames and save first five frames to disk
-  i=0;
   if(av_read_frame(pFormatCtx, &packet)>=0) {
     // Is this a packet from the video stream?
-    if(packet.stream_index==videoStream) {
+    //if(packet.stream_index==videoStream) {
       // Decode video frame
       avcodec_decode_video2(pCodecCtx, pFrame, &frameFinished, 
          &packet);
@@ -134,32 +133,37 @@ int main(int argc, char *argv[]) {
             pFrameRGB->linesize
         );
         
-        utahCodec = avcodec_find_encoder(AV_CODEC_ID_UTAH);
-        pCodecCtx->codec = utahCodec;
-        avcodec_encode_video2(pCodecCtx, &utahPacket, pFrameRGB, &gotPacket);
-        FILE *pFile;
-        pFile = fopen("frame.utah", "wb");
-        fwrite(utahPacket.data, 1, utahPacket.size, pFile);
-        fclose(pFile);     
+             
       }
+      utahPacket.size = 0;
+      utahPacket.data = NULL;
+      utahCodec = avcodec_find_encoder(AV_CODEC_ID_UTAH);
+      pCodecCtx->codec = utahCodec;
+      avcodec_encode_video2(pCodecCtx, &utahPacket, pFrameRGB, &gotPacket);
+
+      FILE *pFile;
+      pFile = fopen("frame.utah", "wb");
+      cout<<"Packet size = "<<utahPacket.size<<endl;
+      fwrite(utahPacket.data, 1, utahPacket.size, pFile);
+      fclose(pFile);
     }
     
     // Free the packet that was allocated by av_read_frame
-    av_free_packet(&packet);
-  }
+    //av_free_packet(&packet);
+  //}
   
   // Free the RGB image
-  av_free(buffer);
-  av_free(pFrameRGB);
+  //av_free(buffer);
+  //av_free(pFrameRGB);
   
   // Free the YUV frame
-  av_free(pFrame);
+  //av_free(pFrame);
   
   // Close the codec
-  avcodec_close(pCodecCtx);
+  //avcodec_close(pCodecCtx);
   
   // Close the video file
-  avformat_close_input(&pFormatCtx);
+  //avformat_close_input(&pFormatCtx);
   
   return 0;
 }
