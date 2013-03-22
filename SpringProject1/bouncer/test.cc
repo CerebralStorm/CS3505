@@ -16,36 +16,17 @@ extern "C"
 
 using namespace std;
 
-void SaveFrame(AVFrame *pFrame, int width, int height, int iFrame) {
-  FILE *pFile;
-  char szFilename[32];
-  int  y;
-  
-  // Open file
-  sprintf(szFilename, "frame%d.ppm", iFrame);
-  pFile=fopen(szFilename, "wb");
-  if(pFile==NULL)
-    return;
-  
-  // Write header
-  fprintf(pFile, "P6\n%d %d\n255\n", width, height);
-  
-  // Write pixel data
-  for(y=0; y<height; y++)
-    fwrite(pFrame->data[0]+y*pFrame->linesize[0], 1, width*3, pFile);
-  
-  // Close file
-  fclose(pFile);
-}
-
 int main(int argc, char *argv[]) {
   AVFormatContext *pFormatCtx = NULL;
   int             i, videoStream;
   AVCodecContext  *pCodecCtx = NULL;
   AVCodec         *pCodec = NULL;
+  AVCodec         *utahCodec = NULL;
   AVFrame         *pFrame = NULL; 
   AVFrame         *pFrameRGB = NULL;
   AVPacket        packet;
+  AVPacket        utahPacket;
+  int             gotPacket = 0;
   int             frameFinished;
   int             numBytes;
   uint8_t         *buffer = NULL;
@@ -59,6 +40,7 @@ int main(int argc, char *argv[]) {
   }
   // Register all formats and codecs
   av_register_all();
+  avcodec_register_all();
   
   // Open video file
   if(avformat_open_input(&pFormatCtx, argv[1], NULL, NULL)!=0)
@@ -80,7 +62,7 @@ int main(int argc, char *argv[]) {
     }
   if(videoStream==-1)
     return -1; // Didn't find a video stream
-  
+
   // Get a pointer to the codec context for the video stream
   pCodecCtx=pFormatCtx->streams[videoStream]->codec;
   
@@ -130,16 +112,17 @@ int main(int argc, char *argv[]) {
   
   // Read frames and save first five frames to disk
   i=0;
-  while(av_read_frame(pFormatCtx, &packet)>=0) {
+  if(av_read_frame(pFormatCtx, &packet)>=0) {
     // Is this a packet from the video stream?
     if(packet.stream_index==videoStream) {
       // Decode video frame
       avcodec_decode_video2(pCodecCtx, pFrame, &frameFinished, 
          &packet);
+
       
       // Did we get a video frame?
       if(frameFinished) {
-  // Convert the image from its native format to RGB
+        // Convert the image from its native format to RGB
         sws_scale
         (
             sws_ctx,
@@ -150,11 +133,14 @@ int main(int argc, char *argv[]) {
             pFrameRGB->data,
             pFrameRGB->linesize
         );
-  
-  // Save the frame to disk
-  if(++i<=5)
-    SaveFrame(pFrameRGB, pCodecCtx->width, pCodecCtx->height, 
-        i);
+        
+        utahCodec = avcodec_find_encoder(AV_CODEC_ID_UTAH);
+        pCodecCtx->codec = utahCodec;
+        avcodec_encode_video2(pCodecCtx, &utahPacket, pFrameRGB, &gotPacket);
+        FILE *pFile;
+        pFile = fopen("frame.utah", "wb");
+        fwrite(utahPacket.data, 1, utahPacket.size, pFile);
+        fclose(pFile);     
       }
     }
     

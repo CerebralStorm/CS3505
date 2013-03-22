@@ -5,10 +5,6 @@
 #include "internal.h"
 #include "utah.h"
 
-typedef struct UTAHContext {
-    AVFrame picture;
-} UTAHContext;
-
 static int decode_frame(AVCodecContext *avctx,
                         void *data, int *got_frame,
                         AVPacket *avpkt)
@@ -31,7 +27,7 @@ static int decode_frame(AVCodecContext *avctx,
     n = width;
     avctx->width  = width;
     avctx->height = height; /*> 0 ? height : -height;*/
-    avctx->pix_fmt = AV_PIX_FMT_RGB8;    
+    avctx->pix_fmt = AV_PIX_FMT_RGB24;    
 
     p->reference = 0;
     if ((ret = ff_get_buffer(avctx, p)) < 0) {
@@ -46,7 +42,7 @@ static int decode_frame(AVCodecContext *avctx,
     buf = buf0 + hsize;
 
     for (i = 0; i < avctx->height; i++) {
-        memcpy(ptr, buf, n);
+        memcpy(ptr, buf, n*3);
         buf += n;
         ptr += linesize;
     }

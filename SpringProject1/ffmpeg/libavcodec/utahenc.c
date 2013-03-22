@@ -4,11 +4,7 @@
 #include "dsputil.h"
 #include "utah.h"
 
-typedef struct UTAHContext {
-    AVFrame picture;
-} UTAHContext;
-
-static int encode_frame(AVCodecContext *avctx, AVPacket *pkt,
+static int utah_encode_frame(AVCodecContext *avctx, AVPacket *pkt,
                         const AVFrame *pict, int *got_packet)
 {
     UTAHContext *s = avctx->priv_data;
@@ -63,9 +59,9 @@ AVCodec ff_utah_encoder = {
     .id             = AV_CODEC_ID_UTAH,
     .priv_data_size = sizeof(UTAHContext),
     .init           = utah_enc_init,
-    .encode2        = encode_frame,
+    .encode2        = utah_encode_frame,
     .pix_fmts       = (const enum AVPixelFormat[]){
-        AV_PIX_FMT_RGB8,
+        AV_PIX_FMT_RGB24,
         AV_PIX_FMT_NONE
     },
     .long_name      = NULL_IF_CONFIG_SMALL("UTAH (Built for CS 3505 in U of U) image"),

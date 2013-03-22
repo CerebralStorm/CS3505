@@ -22,6 +22,8 @@
 #ifndef AVCODEC_UTAH_H
 #define AVCODEC_UTAH_H
 
-
+typedef struct UTAHContext {
+    AVFrame picture;
+} UTAHContext;
 
 #endif /* AVCODEC_UTAH_H */
