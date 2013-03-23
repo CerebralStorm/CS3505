@@ -8,4 +8,6 @@ clean:
 
 movie: 
 	./a.out test.jpg
+	ffmpeg -i frame%03d.utah -vcodec mpeg4 test.avi
+	make clean
 
