@@ -1,4 +1,5 @@
 #include <iostream>
+#include <math.h>
 
 #ifndef INT64_C
 #define INT64_C(c) (c ## LL)
@@ -15,6 +16,28 @@ extern "C"
 }
 
 using namespace std;
+
+void drawPixel(int x, int y, int r, int g, int b, AVFrame *f) {
+  uint8_t *pix = f->data[0] + f->linesize[0] * y + x * 3;
+  *(pix++) = r;
+  *(pix++) = g;
+  *(pix++) = b;
+}
+
+void drawCircle(int cx, int cy, AVFrame *f) {
+  int rad = 30;
+  int x, y, cirX, cirY;
+
+  for(x = cx-rad; x <= cx+rad; x++) {
+    for(y = cy-rad; y <= cy+rad; y++) {
+      cirX = x - cx;
+      cirY = y - cy;
+      if (((cirX*cirX)+(cirY*cirY))<(rad*rad)) {
+        drawPixel(x, y, 255, 255, 255, f);
+      }
+    }
+  }     
+}
 
 int main(int argc, char *argv[]) {
   AVFormatContext *pFormatCtx = NULL;
@@ -118,28 +141,29 @@ int main(int argc, char *argv[]) {
             pCodecCtx->height,
             pFrameRGB->data,
             pFrameRGB->linesize
-        );
-        
-             
+        );             
       }
-      utahPacket.size = 0;
-      utahPacket.data = NULL;
-      utahCodec = avcodec_find_encoder(AV_CODEC_ID_UTAH);
-      pCodecCtx->codec = utahCodec;
-      avcodec_encode_video2(pCodecCtx, &utahPacket, pFrameRGB, &gotPacket);
 
-      char filename[32];
+      int cirX = pCodecCtx->width / 3;
+      int cirY = pCodecCtx->height / 8;
+      for(int i = 0; i < 10; i++) {
+        drawCircle(cirX, cirY, pFrameRGB);
+        cirY--;
 
-    
-      for(int i=1; i<=10; i++)
-      {
-          FILE *pFile;
-          snprintf(filename, sizeof(filename), "frame%03d.utah", i);
-          pFile = fopen(filename, "wb");
-          cout<<"Packet size = "<<utahPacket.size<<endl;
-          fwrite(utahPacket.data, 1, utahPacket.size, pFile);
-          fclose(pFile);
-      }
+        utahPacket.size = 0;
+        utahPacket.data = NULL;
+        utahCodec = avcodec_find_encoder(AV_CODEC_ID_UTAH);
+        pCodecCtx->codec = utahCodec;
+        avcodec_encode_video2(pCodecCtx, &utahPacket, pFrameRGB, &gotPacket);
+
+        char filename[32];
+
+        FILE *pFile;
+        snprintf(filename, sizeof(filename), "frame%03d.utah", i);
+        pFile = fopen(filename, "wb");
+        fwrite(utahPacket.data, 1, utahPacket.size, pFile);
+        fclose(pFile);
+      }      
     }
     
     // Free the packet that was allocated by av_read_frame
