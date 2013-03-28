@@ -24,6 +24,7 @@
 #include "internal.h"
 #include "utah.h"
 
+// initialize decoder
 static av_cold int utah_decode_init(AVCodecContext *avctx)
 {
     UTAHContext *context = avctx->priv_data;
@@ -33,6 +34,7 @@ static av_cold int utah_decode_init(AVCodecContext *avctx)
     return 0;
 }
 
+// decodes the frame
 static int utah_decode_frame(AVCodecContext *avctx, void *data, int *got_frame, AVPacket *avpkt)
 {
     UTAHContext *context = avctx->priv_data;
@@ -49,12 +51,14 @@ static int utah_decode_frame(AVCodecContext *avctx, void *data, int *got_frame, 
     AVFrame *pic = &context->picture;
     avctx->pix_fmt = AV_PIX_FMT_RGB24;
 
+    // ensure the image has the correct header size
     if(buffer_size < hsize)
     {
         av_log(avctx, AV_LOG_ERROR, "Image is not a .utah image(invalid hsize size)\n");
         return AVERROR_INVALIDDATA;
     }
 
+    // ensure the image is a utah image
     if(bytestream_get_byte(&buffer) != 'U' || bytestream_get_byte(&buffer)!='T')
     {
         av_log(avctx, AV_LOG_ERROR, "Invalid .utah image\n");
@@ -68,6 +72,7 @@ static int utah_decode_frame(AVCodecContext *avctx, void *data, int *got_frame, 
     line = bytestream_get_le32(&buffer);
     avctx->width =width;
 
+    // get the number of bytes
     n_bytes = height*line + hsize; 
     if(n_bytes != buffer_size)
     {
