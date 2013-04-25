@@ -64,7 +64,6 @@ int main(int argc, char *argv[]) {
   int             frameFinished;
   int             numBytes;
   uint8_t         *buffer = NULL;
-  uint8_t         *buffer2 = NULL;
 
   AVDictionary    *optionsDict = NULL;
   struct SwsContext      *sws_ctx = NULL;
@@ -146,6 +145,7 @@ int main(int argc, char *argv[]) {
           pFrameRGB->linesize
       );             
     }
+    sws_freeContext(sws_ctx);
 
     int height = pCodecCtx->height;
     int width = pCodecCtx->width;
@@ -155,12 +155,11 @@ int main(int argc, char *argv[]) {
     int cirX = height/2+rad;
     int cirY = height/2;
     int dir = 0;
-    int velocity = 8;    
+    int velocity = 8; 
     
-
-    AVFrame * tempFrame;
     for(int i = 0; i < 300; i++) {
       // Allocate an AVFrame structure
+      AVFrame * tempFrame;
       tempFrame = avcodec_alloc_frame();
       
       // Determine required buffer size and allocate buffer
@@ -214,12 +213,13 @@ int main(int argc, char *argv[]) {
       fclose(pFile);
       
       // free up the temp frame
-      //av_free(tempFrame);
+      av_free(tempFrame);
     }      
   }
     
   // Free the packet that was allocated by av_read_frame
   av_free_packet(&packet);
+  av_free_packet(&utahPacket);
   
   // Free the RGB image
   av_free(buffer);
