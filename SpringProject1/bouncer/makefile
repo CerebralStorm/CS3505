@@ -7,6 +7,6 @@ clean:
 	rm -f *.o *.utah a.out
 
 movie: 
-	./a.out test.jpg
+	./a.out test2.jpg
 	ffmpeg -i frame%03d.utah -vcodec mpeg4 test.mp4
 	rm -f *.utah

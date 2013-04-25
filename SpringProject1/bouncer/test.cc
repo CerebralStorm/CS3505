@@ -38,8 +38,8 @@ void drawCircle(int cx, int cy, int rad, AVFrame *f) {
   int x, y, cirX, cirY;
   int i;
 
-  for(x = cx-rad; x <= cx+rad; x++) {
-    for(y = cy-rad; y <= cy+rad; y++) {
+  for(x = cx-rad; x < cx+rad; x++) {
+    for(y = cy-rad; y < cy+rad; y++) {
       cirX = x - cx;
       cirY = y - cy;
       if (((cirX*cirX)+(cirY*cirY))<(rad*rad)) {
@@ -111,9 +111,7 @@ int main(int argc, char *argv[]) {
   numBytes = avpicture_get_size(PIX_FMT_RGB24, pCodecCtx->width, pCodecCtx->height);
   buffer = (uint8_t *) av_malloc(numBytes*sizeof(uint8_t));
 
-  sws_ctx =
-    sws_getContext
-    (
+  sws_ctx = sws_getContext(
         pCodecCtx->width,
         pCodecCtx->height,
         pCodecCtx->pix_fmt,
@@ -138,8 +136,7 @@ int main(int argc, char *argv[]) {
     // Did we get a video frame?
     if(frameFinished) {
       // Convert the image from its native format to RGB
-      sws_scale
-      (
+      sws_scale(
           sws_ctx,
           (uint8_t const * const *)pFrame->data,
           pFrame->linesize,
@@ -150,20 +147,21 @@ int main(int argc, char *argv[]) {
       );             
     }
 
-    int cirX = pCodecCtx->width / 3;
-    int cirY = pCodecCtx->height / 8;
-    int dir = 0;
-    int velocity = 8;
     int height = pCodecCtx->height;
-    int rad = pCodecCtx->width / 8;
+    int width = pCodecCtx->width;
+    int rad = width/8;
+    cout << "Height: " << height << endl;
+    cout << "Width: " << width << endl;
+    int cirX = height/2+rad;
+    int cirY = height/2;
+    int dir = 0;
+    int velocity = 8;    
+    
 
+    AVFrame * tempFrame;
     for(int i = 0; i < 300; i++) {
-      /*Begin Frame Copy*/
-      AVFrame * tempFrame;
       // Allocate an AVFrame structure
       tempFrame = avcodec_alloc_frame();
-      if(pFrameRGB==NULL)
-        return -1;
       
       // Determine required buffer size and allocate buffer
       numBytes = avpicture_get_size(PIX_FMT_RGB24, pCodecCtx->width, pCodecCtx->height);
@@ -180,13 +178,13 @@ int main(int argc, char *argv[]) {
         NULL,
         NULL,
         NULL
-      );      
+      );     
 
       // Assign appropriate parts of buffer to image planes in tempFrame
       avpicture_fill((AVPicture *)tempFrame, buffer, PIX_FMT_RGB24, pCodecCtx->width, pCodecCtx->height);
+      
       sws_scale(sws_ctx,pFrameRGB->data,pFrameRGB->linesize,0,pCodecCtx->height,tempFrame->data,tempFrame->linesize);
       sws_freeContext(sws_ctx);
-      /*End Frame Copy*/
 
       drawCircle(cirX, cirY, rad, tempFrame);
 
@@ -196,9 +194,9 @@ int main(int argc, char *argv[]) {
       if(dir == 1)
         cirY -= (int) velocity;
 
-      if(cirY+rad > height)
+      if(cirY+rad+velocity+1 > height)
         dir = 1;
-      if(cirY-rad < 0)
+      if(cirY-rad-velocity-1 < 0)
         dir = 0;
 
       utahPacket.size = 0;
@@ -216,7 +214,7 @@ int main(int argc, char *argv[]) {
       fclose(pFile);
       
       // free up the temp frame
-      av_free(tempFrame);
+      //av_free(tempFrame);
     }      
   }
     
